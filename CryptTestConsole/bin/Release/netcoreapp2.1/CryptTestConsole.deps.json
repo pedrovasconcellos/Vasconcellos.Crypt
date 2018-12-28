@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.1",
+    "signature": "da39a3ee5e6b4b0d3255bfef95601890afd80709"
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.1": {
+      "CryptTestConsole/1.0.0": {
+        "dependencies": {
+          "Vasconcellos.Crypt": "1.0.0"
+        },
+        "runtime": {
+          "CryptTestConsole.dll": {}
+        }
+      },
+      "Vasconcellos.Crypt/1.0.0": {
+        "runtime": {
+          "Vasconcellos.Crypt.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "CryptTestConsole/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Vasconcellos.Crypt/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

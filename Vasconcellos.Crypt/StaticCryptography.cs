@@ -59,26 +59,20 @@ namespace Vasconcellos.Crypt
                 if (!baseKey.Any(c => char.IsLower(c))) throw new ArgumentException("The key must contain at least one lowercase letter.");
             }
 
-            if (rgbiv == null)
-                RGBIV = new byte[8] { 171, 182, 193, 144, 165, 157, 148, 199 };
-            else RGBIV = rgbiv;
-
-            if (salt == null)
-                Salt = new byte[8] { 0x12, 0x23, 0x45, 0x56, 0x78, 0xff, 0xab, 0x89 };
-            else Salt = salt;
-
-            if (string.IsNullOrEmpty(baseKey))
-                BaseKey = "7#Key=http://vasconcellos.solutions";
-            else BaseKey = baseKey;
-
+            RGBIV = (rgbiv ?? (new byte[8] { 171, 182, 193, 144, 165, 157, 148, 199 }));
+            Salt = (salt ?? (new byte[8] { 0x12, 0x23, 0x45, 0x56, 0x78, 0xff, 0xab, 0x89 }));
+            BaseKey = (string.IsNullOrEmpty(baseKey) ? "7#Key=http://vasconcellos.solutions" : baseKey);
             Key = GenerateKey();
+
             return Initialized = !(RGBIV == null && Salt == null && string.IsNullOrEmpty(BaseKey) && Key == null);
         }
 
         private static byte[] GenerateKey()
         {
-            var keyBytes = new Rfc2898DeriveBytes(BaseKey, Salt);
-            return keyBytes.GetBytes(8);
+            using (var keyBytes = new Rfc2898DeriveBytes(BaseKey, Salt))
+            {
+                return keyBytes.GetBytes(8);
+            }
         }
 
         public static string Encrypt(string stringToEncrypt)
@@ -89,8 +83,8 @@ namespace Vasconcellos.Crypt
                 using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
                 {
                     byte[] inputByteArray = Encoding.UTF8.GetBytes(stringToEncrypt);
-                    MemoryStream ms = new MemoryStream();
-                    CryptoStream cs = new CryptoStream(ms, des.CreateEncryptor(Key, RGBIV), CryptoStreamMode.Write);
+                    var ms = new MemoryStream();
+                    var cs = new CryptoStream(ms, des.CreateEncryptor(Key, RGBIV), CryptoStreamMode.Write);
                     cs.Write(inputByteArray, 0, inputByteArray.Length);
                     cs.FlushFinalBlock();
                     return Convert.ToBase64String(ms.ToArray());
@@ -110,12 +104,11 @@ namespace Vasconcellos.Crypt
                 using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
                 {
                     byte[] inputByteArray = Convert.FromBase64String(stringToDecrypt);
-                    MemoryStream ms = new MemoryStream();
-                    CryptoStream cs = new CryptoStream(ms, des.CreateDecryptor(Key, RGBIV), CryptoStreamMode.Write);
+                    var ms = new MemoryStream();
+                    var cs = new CryptoStream(ms, des.CreateDecryptor(Key, RGBIV), CryptoStreamMode.Write);
                     cs.Write(inputByteArray, 0, inputByteArray.Length);
                     cs.FlushFinalBlock();
-                    Encoding encoding = Encoding.UTF8;
-                    return encoding.GetString(ms.ToArray());
+                    return Encoding.UTF8.GetString(ms.ToArray());
                 }
             }
             catch (Exception e)
