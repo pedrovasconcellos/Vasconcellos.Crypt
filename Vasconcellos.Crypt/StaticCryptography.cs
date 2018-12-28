@@ -37,8 +37,7 @@ namespace Vasconcellos.Crypt
 
         private static byte[] Key { get; set; }
 
-        private static bool Initialized { get; set; }
-
+        public static bool Initialized { get; private set; }
 
         /// <summary>
         /// Note: If you initialize the class [StaticCryptography] using values generates automatically, store the randomly generated values in some safe place.
