@@ -119,12 +119,12 @@ namespace Vasconcellos.Crypt
 
         public static byte[] GenerateSalt()
         {
-            var randomBytes = new byte[8];
+            var bytes = new byte[8];
             using (var rngCsp = new RNGCryptoServiceProvider())
             {
-                rngCsp.GetBytes(randomBytes);
+                rngCsp.GetBytes(bytes);
             }
-            return randomBytes;
+            return bytes;
         }
 
         public static byte[] GenerateRGBIV()
@@ -143,8 +143,7 @@ namespace Vasconcellos.Crypt
             {
                 crypto.GetBytes(bytes);
             }          
-            var base64 = Convert.ToBase64String(bytes);
-            return base64;
+            return Convert.ToBase64String(bytes);
         }
     }
 }
