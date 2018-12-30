@@ -10,6 +10,11 @@
 
 #### Site: https://vasconcellos.solutions
 
+#### Nuget: https://www.nuget.org/packages/Vasconcellos.Crypt/
+
+##### Nuget Package Manager: Install-Package Vasconcellos.Crypt
+##### Nuget .NET CLI: dotnet add package Vasconcellos.Crypt
+
 
 Use to initialize the static cryptography
 ```csharp
