@@ -48,6 +48,7 @@ namespace Vasconcellos.Crypt
         /// <returns>true</returns>
         public static bool Initialize(byte[] rgbiv = null, byte[] salt = null, string baseKey = null)
         {
+            if (Initialized) throw new Exception("The class [StaticCryptography] can not be initialized more than once.");
             if (rgbiv != null && rgbiv.Length != 8) throw new ArgumentException("The array must contain 8 positions.");
             if (salt != null && salt.Length != 8) throw new ArgumentException("The array must contain 8 positions.");
 
