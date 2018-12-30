@@ -709,11 +709,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Vasconcellos\\Vasconcellos.Crypt\\CryptTestConsole\\CryptTestConsole.csproj",
+      "projectUniqueName": "C:\\Vasconcellos\\Vasconcellos.Crypt\\CryptTestConsole\\CryptTestConsole.csproj",
       "projectName": "CryptTestConsole",
-      "projectPath": "c:\\Vasconcellos\\Vasconcellos.Crypt\\CryptTestConsole\\CryptTestConsole.csproj",
+      "projectPath": "C:\\Vasconcellos\\Vasconcellos.Crypt\\CryptTestConsole\\CryptTestConsole.csproj",
       "packagesPath": "C:\\Users\\Vasconcellos\\.nuget\\packages\\",
-      "outputPath": "c:\\Vasconcellos\\Vasconcellos.Crypt\\CryptTestConsole\\obj\\",
+      "outputPath": "C:\\Vasconcellos\\Vasconcellos.Crypt\\CryptTestConsole\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -732,8 +732,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "c:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\Vasconcellos.Crypt.csproj": {
-              "projectPath": "c:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\Vasconcellos.Crypt.csproj"
+            "C:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\Vasconcellos.Crypt.csproj": {
+              "projectPath": "C:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\Vasconcellos.Crypt.csproj"
             }
           }
         }

@@ -24,11 +24,11 @@ using Vasconcellos.Crypt;
 
 namespace CryptTestConsole
 {
-    class Program
+    internal class Program
     {
         delegate void Func(Obj obj);
 
-        static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("\nType y to use the static encryption class or type anything to use the instantiated crypto class.");
@@ -56,9 +56,9 @@ namespace CryptTestConsole
         {
             var crypt = new Cryptography(
 
+                    baseKey: StaticCryptography.GenerateBaseKey(),
                     rgbiv: StaticCryptography.GenerateRGBIV(),
-                    salt: StaticCryptography.GenerateSalt(),
-                    baseKey: StaticCryptography.GenerateBaseKey()
+                    salt: StaticCryptography.GenerateSalt()
                 );
 
             obj.EncryptedWord = crypt.Encrypt(obj.Word);
@@ -69,9 +69,9 @@ namespace CryptTestConsole
         {
             StaticCryptography.Initialize(
 
+                    baseKey: StaticCryptography.GenerateBaseKey(),
                     rgbiv: StaticCryptography.GenerateRGBIV(),
-                    salt: StaticCryptography.GenerateSalt(),
-                    baseKey: StaticCryptography.GenerateBaseKey()
+                    salt: StaticCryptography.GenerateSalt()
                 );
 
             obj.EncryptedWord = StaticCryptography.Encrypt(obj.Word);

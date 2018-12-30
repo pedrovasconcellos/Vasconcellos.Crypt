@@ -29,40 +29,40 @@ namespace Vasconcellos.Crypt
 {
     public class StaticCryptography
     {
+        private static string BaseKey { get; set; }
+
         private static byte[] RGBIV { get; set; }
 
         private static byte[] Salt { get; set; }
-
-        private static string BaseKey { get; set; }
 
         private static byte[] Key { get; set; }
 
         public static bool Initialized { get; private set; }
 
         /// <summary>
+        /// Initializer [Static Cryptography]
         /// Note: If you initialize the class [StaticCryptography] using values generates automatically, store the randomly generated values in some safe place.
+        /// Note: To increase the security of encryption, create your own RGBIV and Salt using the automatic class generation methods [Static Cryptography].
         /// </summary>
         /// <param name="rgbiv"></param>
         /// <param name="salt"></param>
         /// <param name="baseKey">Encryption Key</param>
         /// <returns>true</returns>
-        public static bool Initialize(byte[] rgbiv = null, byte[] salt = null, string baseKey = null)
+        public static bool Initialize(string baseKey, byte[] rgbiv = null, byte[] salt = null)
         {
             if (Initialized) throw new Exception("The class [StaticCryptography] can not be initialized more than once.");
-            if (rgbiv != null && rgbiv.Length != 8) throw new ArgumentException("The array must contain 8 positions.");
-            if (salt != null && salt.Length != 8) throw new ArgumentException("The array must contain 8 positions.");
+            if (rgbiv != null && rgbiv.Length != 8) throw new ArgumentException("The RGBIV must contain 8 positions.");
+            if (salt != null && salt.Length != 8) throw new ArgumentException("The Salt must contain 8 positions.");
 
-            if (!string.IsNullOrEmpty(baseKey))
-            {
-                if (baseKey.Length < 7) throw new ArgumentException("The baseKey must contain more of 7 positions.");
-                if (!baseKey.Any(c => char.IsDigit(c))) throw new ArgumentException("The baseKey must contain at least one digit.");
-                if (!baseKey.Any(c => char.IsUpper(c))) throw new ArgumentException("The key must contain at least one upperrcase letter.");
-                if (!baseKey.Any(c => char.IsLower(c))) throw new ArgumentException("The key must contain at least one lowercase letter.");
-            }
+            if (string.IsNullOrEmpty(baseKey)) throw new ArgumentException("The Basekey can not null or empty.");
+            if (baseKey.Length < 8) throw new ArgumentException("Basekey must contain 8 or more positions.");
+            if (!baseKey.Any(c => char.IsDigit(c))) throw new ArgumentException("The Basekey must contain at least one digit.");
+            if (!baseKey.Any(c => char.IsUpper(c))) throw new ArgumentException("The Basekey must contain at least one upperrcase letter.");
+            if (!baseKey.Any(c => char.IsLower(c))) throw new ArgumentException("The Basekey must contain at least one lowercase letter.");
 
             RGBIV = (rgbiv ?? (new byte[8] { 171, 182, 193, 144, 165, 157, 148, 199 }));
             Salt = (salt ?? (new byte[8] { 0x12, 0x23, 0x45, 0x56, 0x78, 0xff, 0xab, 0x89 }));
-            BaseKey = (string.IsNullOrEmpty(baseKey) ? "7#Key=http://vasconcellos.solutions" : baseKey);
+            BaseKey = baseKey;
             Key = GenerateKey();
 
             return Initialized = !(RGBIV == null && Salt == null && string.IsNullOrEmpty(BaseKey) && Key == null);
