@@ -28,9 +28,9 @@ class Program
         //store the randomly generated values in some safe place.
         
         StaticCryptography.Initialize(
+            baseKey: StaticCryptography.GenerateBaseKey(),
             rgbiv: StaticCryptography.GenerateRGBIV(),
-            salt: StaticCryptography.GenerateSalt(),
-            baseKey: StaticCryptography.GenerateBaseKey()
+            salt: StaticCryptography.GenerateSalt()
             );
     }
 }
