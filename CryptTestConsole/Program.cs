@@ -26,27 +26,68 @@ namespace CryptTestConsole
 {
     class Program
     {
+        delegate void Func(Obj obj);
+
         static void Main(string[] args)
         {
-            StaticCryptography.Initialize(
-                rgbiv: StaticCryptography.GenerateRGBIV(),
-                salt: StaticCryptography.GenerateSalt(),
-                baseKey: StaticCryptography.GenerateBaseKey()
-                );
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nType y to use the static encryption class or type anything to use the instantiated crypto class.");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            bool useStatic = Console.ReadLine().Equals("y", StringComparison.OrdinalIgnoreCase);
 
             Console.BackgroundColor = ConsoleColor.Magenta;
             Console.WriteLine("Enter the phrase you want to encrypt.");
             Console.BackgroundColor = ConsoleColor.Black;
 
-            string word = Console.ReadLine();
-            string encrypt = Vasconcellos.Crypt.StaticCryptography.Encrypt(word);
+            var obj = new Obj(Console.ReadLine());
+            Func FuncCrypt = (useStatic ? new Func(StaticCryptTest) : new Func(CryptTest));
+            FuncCrypt(obj);
 
             Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine(encrypt);
+            Console.WriteLine(obj.EncryptedWord);
             Console.BackgroundColor = ConsoleColor.Black;
+            Console.WriteLine(obj.DecryptedWord);
 
-            Console.WriteLine(Vasconcellos.Crypt.StaticCryptography.Decrypt(encrypt));
             Console.ReadKey();
+        }
+
+        private static void CryptTest(Obj obj)
+        {
+            var crypt = new Cryptography(
+
+                    rgbiv: StaticCryptography.GenerateRGBIV(),
+                    salt: StaticCryptography.GenerateSalt(),
+                    baseKey: StaticCryptography.GenerateBaseKey()
+                );
+
+            obj.EncryptedWord = crypt.Encrypt(obj.Word);
+            obj.DecryptedWord = crypt.Decrypt(obj.EncryptedWord);
+        }
+
+        private static void StaticCryptTest(Obj obj)
+        {
+            StaticCryptography.Initialize(
+
+                    rgbiv: StaticCryptography.GenerateRGBIV(),
+                    salt: StaticCryptography.GenerateSalt(),
+                    baseKey: StaticCryptography.GenerateBaseKey()
+                );
+
+            obj.EncryptedWord = StaticCryptography.Encrypt(obj.Word);
+            obj.DecryptedWord = StaticCryptography.Decrypt(obj.EncryptedWord);
+        }
+
+        private class Obj
+        {
+            public Obj(string word)
+            {
+                this.Word = word;
+            }
+
+            public string Word { get; set; }
+            public string EncryptedWord { get; set; }
+            public string DecryptedWord { get; set; }
         }
     }
 }
