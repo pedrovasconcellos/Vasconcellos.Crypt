@@ -92,7 +92,7 @@ namespace CryptTestConsole
 
                     key: CryptographyAES.GenerateKey(),
                     iv: CryptographyAES.GenerateIV(),
-                    bits: CryptographyAES.BitsEnum.bit192
+                    bits: CryptographyAES.BitsEnum.bit256
                 );
 
             obj.EncryptedWord = crypt.Encrypt(obj.Word);

@@ -24,13 +24,12 @@ class Program
     static void YourMethod(string[] args)
     {
         // Note:
-        ///If you initialize the class [StaticCryptography] using values generates automatically, 
+        ///If you initialize the class [CryptographyAES] using values generates automatically, 
         //store the randomly generated values in some safe place.
-        
-        StaticCryptography.Initialize(
-            baseKey: StaticCryptography.GenerateBaseKey(),
-            rgbiv: StaticCryptography.GenerateRGBIV(),
-            salt: StaticCryptography.GenerateSalt()
+        var crypt = new CryptographyAES(
+                key: CryptographyAES.GenerateKey(),
+                iv: CryptographyAES.GenerateIV(),
+                bits: CryptographyAES.BitsEnum.bit256
             );
     }
 }
@@ -40,7 +39,7 @@ Example of how to encrypt
 ```csharp
 public string YourMethod(string word)
 {
-    return Vasconcellos.Crypt.StaticCryptography.Encrypt(word);
+    return Vasconcellos.Crypt.CryptographyAES.Encrypt(word);
 }
 ```
 
@@ -48,6 +47,6 @@ Example of how to decrypt
 ```csharp
 public string YourMethod(string word)
 {
-    return Vasconcellos.Crypt.StaticCryptography.Decrypt(word);
+    return Vasconcellos.Crypt.CryptographyAES.Decrypt(word);
 }
 ```
