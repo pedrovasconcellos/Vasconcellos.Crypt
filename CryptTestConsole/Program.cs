@@ -30,26 +30,27 @@ namespace CryptTestConsole
 
         internal static void Main(string[] args)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\nType (1 = StaticDES or 2 = DES or 3 = AES) to use the static encryption class or type anything to use the instantiated crypto class.");
-            Console.ForegroundColor = ConsoleColor.White;
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\nType (1 = StaticDES or 2 = DES or 3 = AES) to use the static encryption class or type anything to use the instantiated crypto class.");
+                Console.ForegroundColor = ConsoleColor.White;
 
-            string method = Console.ReadLine();
+                string method = Console.ReadLine();
 
-            Console.BackgroundColor = ConsoleColor.Magenta;
-            Console.WriteLine("Enter the phrase you want to encrypt.");
-            Console.BackgroundColor = ConsoleColor.Black;
+                Console.BackgroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("Enter the phrase you want to encrypt.");
+                Console.BackgroundColor = ConsoleColor.Black;
 
-            Func FuncCrypt = GetMethod(Convert.ToInt16(method));
-            var obj = new Obj(Console.ReadLine());
-            FuncCrypt(obj);
+                Func FuncCrypt = GetMethod(Convert.ToInt16(method));
+                var obj = new Obj(Console.ReadLine());
+                FuncCrypt(obj);
 
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine(obj.EncryptedWord);
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.WriteLine(obj.DecryptedWord);
-
-            Console.ReadKey();
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine(obj.EncryptedWord);
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.WriteLine($"{obj.DecryptedWord}\n");
+            }
         }
 
         private static Func GetMethod(short method)
