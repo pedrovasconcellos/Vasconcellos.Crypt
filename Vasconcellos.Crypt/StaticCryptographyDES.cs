@@ -27,7 +27,7 @@ using System.Text;
 
 namespace Vasconcellos.Crypt
 {
-    public class StaticCryptography
+    public class StaticCryptographyDES
     {
         private static string BaseKey { get; set; }
 
@@ -40,7 +40,7 @@ namespace Vasconcellos.Crypt
         public static bool Initialized { get; private set; }
 
         /// <summary>
-        /// Initializer [Static Cryptography]
+        /// Initializer [Static Cryptography DES]
         /// Note: If you initialize the class [StaticCryptography] using values generates automatically, store the randomly generated values in some safe place.
         /// Note: To increase the security of encryption, create your own RGBIV and Salt using the automatic class generation methods [Static Cryptography].
         /// </summary>
@@ -76,14 +76,15 @@ namespace Vasconcellos.Crypt
             }
         }
 
-        public static string Encrypt(string stringToEncrypt)
+        public static string Encrypt(string text)
         {
             try
             {
-                if (Initialized == false) throw new ArgumentException("The class [StaticEncryption] was not initialized.");
+                if (string.IsNullOrEmpty(text)) return null;
+                if (Initialized == false) throw new ArgumentException($"The class {nameof(StaticCryptographyDES)} was not initialized.");
                 using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
                 {
-                    byte[] inputByteArray = Encoding.UTF8.GetBytes(stringToEncrypt);
+                    byte[] inputByteArray = Encoding.UTF8.GetBytes(text);
                     var ms = new MemoryStream();
                     var cs = new CryptoStream(ms, des.CreateEncryptor(Key, RGBIV), CryptoStreamMode.Write);
                     cs.Write(inputByteArray, 0, inputByteArray.Length);
@@ -97,14 +98,15 @@ namespace Vasconcellos.Crypt
             }
         }
 
-        public static string Decrypt(string stringToDecrypt)
+        public static string Decrypt(string text)
         {
             try
             {
-                if (Initialized == false) throw new ArgumentException("The class [StaticEncryption] was not initialized.");
+                if (string.IsNullOrEmpty(text)) return null;
+                if (Initialized == false) throw new ArgumentException($"The class {nameof(StaticCryptographyDES)} was not initialized.");
                 using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
                 {
-                    byte[] inputByteArray = Convert.FromBase64String(stringToDecrypt);
+                    byte[] inputByteArray = Convert.FromBase64String(text);
                     var ms = new MemoryStream();
                     var cs = new CryptoStream(ms, des.CreateDecryptor(Key, RGBIV), CryptoStreamMode.Write);
                     cs.Write(inputByteArray, 0, inputByteArray.Length);

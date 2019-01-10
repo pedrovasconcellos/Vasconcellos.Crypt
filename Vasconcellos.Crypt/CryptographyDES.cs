@@ -27,7 +27,7 @@ using System.Text;
 
 namespace Vasconcellos.Crypt
 {
-    public class Cryptography
+    public class CryptographyDES
     {
         private readonly string BaseKey;
 
@@ -40,14 +40,14 @@ namespace Vasconcellos.Crypt
         public readonly bool Initialized;
 
         /// <summary>
-        /// Cryptography constructor
-        /// Note: If you initialize the class [StaticCryptography] using values generates automatically, store the randomly generated values in some safe place.
-        /// Note: To increase the security of encryption, create your own RGBIV and Salt using the automatic class generation methods [Static Cryptography].
+        /// Cryptography DES constructor
+        /// Note: If you initialize the class [CryptographyDES] using values generates automatically, store the randomly generated values in some safe place.
+        /// Note: To increase the security of encryption, create your own RGBIV and Salt using the automatic class generation methods [CryptographyDES].
         /// </summary>
         /// <param name="rgbiv"></param>
         /// <param name="salt"></param>
         /// <param name="baseKey"></param>
-        public Cryptography(string baseKey, byte[] rgbiv = null, byte[] salt = null)
+        public CryptographyDES(string baseKey, byte[] rgbiv = null, byte[] salt = null)
         {
             if (rgbiv != null && rgbiv.Length != 8) throw new ArgumentException("The RGBIV must contain 8 positions.");
             if (salt != null && salt.Length != 8) throw new ArgumentException("The Salt must contain 8 positions.");
@@ -73,14 +73,15 @@ namespace Vasconcellos.Crypt
             }
         }
 
-        public string Encrypt(string stringToEncrypt)
+        public string Encrypt(string text)
         {
             try
             {
-                if (this.Initialized == false) throw new ArgumentException("The class [StaticEncryption] was not initialized.");
+                if (string.IsNullOrEmpty(text)) return null;
+                if (Initialized == false) throw new ArgumentException($"The class {nameof(CryptographyDES)} was not initialized.");
                 using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
                 {
-                    byte[] inputByteArray = Encoding.UTF8.GetBytes(stringToEncrypt);
+                    byte[] inputByteArray = Encoding.UTF8.GetBytes(text);
                     var ms = new MemoryStream();
                     var cs = new CryptoStream(ms, des.CreateEncryptor(this.Key, this.RGBIV), CryptoStreamMode.Write);
                     cs.Write(inputByteArray, 0, inputByteArray.Length);
@@ -94,14 +95,15 @@ namespace Vasconcellos.Crypt
             }
         }
 
-        public string Decrypt(string stringToDecrypt)
+        public string Decrypt(string text)
         {
             try
             {
-                if (this.Initialized == false) throw new ArgumentException("The class [StaticEncryption] was not initialized.");
+                if (string.IsNullOrEmpty(text)) return null;
+                if (Initialized == false) throw new ArgumentException($"The class {nameof(CryptographyDES)} was not initialized.");
                 using (DESCryptoServiceProvider des = new DESCryptoServiceProvider())
                 {
-                    byte[] inputByteArray = Convert.FromBase64String(stringToDecrypt);
+                    byte[] inputByteArray = Convert.FromBase64String(text);
                     var ms = new MemoryStream();
                     var cs = new CryptoStream(ms, des.CreateDecryptor(this.Key, this.RGBIV), CryptoStreamMode.Write);
                     cs.Write(inputByteArray, 0, inputByteArray.Length);
@@ -113,6 +115,35 @@ namespace Vasconcellos.Crypt
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        public static byte[] GenerateSalt()
+        {
+            var bytes = new byte[8];
+            using (var rngCsp = new RNGCryptoServiceProvider())
+            {
+                rngCsp.GetBytes(bytes);
+            }
+            return bytes;
+        }
+
+        public static byte[] GenerateRGBIV()
+        {
+            using (var des = new DESCryptoServiceProvider())
+            {
+                des.GenerateIV();
+                return des.IV;
+            }
+        }
+
+        public static string GenerateBaseKey()
+        {
+            var bytes = new byte[77];
+            using (var crypto = new RNGCryptoServiceProvider())
+            {
+                crypto.GetBytes(bytes);
+            }
+            return Convert.ToBase64String(bytes);
         }
     }
 }

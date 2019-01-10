@@ -30,10 +30,12 @@
   },
   "libraries": {
     "Microsoft.NETCore.Platforms/1.1.0": {
-      "sha512": "kz0PEW2lhqygehI/d6XsPCQzD7ff7gUJaVGPVETX611eadGsA3A877GdSlU0LRVMCTH/+P3o2iDTak+S08V2+A==",
+      "sha512": "bLpT1f/SFlO1CzqXG12KnJzpZs6lv24uX2Rzi4Fmm0noJpNlnWRVryuO3yK18Ca04t/YHcO1e1Z0WDfjseqNzw==",
       "type": "package",
       "path": "microsoft.netcore.platforms/1.1.0",
       "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
         "ThirdPartyNotices.txt",
         "dotnet_library_license.txt",
         "lib/netstandard1.0/_._",
@@ -177,23 +179,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Vasconcellos\\.nuget\\packages\\": {},
+    "C:\\Users\\pedro\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\Vasconcellos.Crypt.csproj",
+      "projectUniqueName": "C:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\Vasconcellos.Crypt.csproj",
       "projectName": "Vasconcellos.Crypt",
-      "projectPath": "c:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\Vasconcellos.Crypt.csproj",
-      "packagesPath": "C:\\Users\\Vasconcellos\\.nuget\\packages\\",
-      "outputPath": "c:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\obj\\",
+      "projectPath": "C:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\Vasconcellos.Crypt.csproj",
+      "packagesPath": "C:\\Users\\pedro\\.nuget\\packages\\",
+      "outputPath": "C:\\Vasconcellos\\Vasconcellos.Crypt\\Vasconcellos.Crypt\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Vasconcellos\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\pedro\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -201,6 +203,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "http://192.168.0.60/Repom.Nuget.Server/nuget": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {

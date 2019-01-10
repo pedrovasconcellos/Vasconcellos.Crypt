@@ -31,17 +31,17 @@ namespace CryptTestConsole
         internal static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("\nType y to use the static encryption class or type anything to use the instantiated crypto class.");
+            Console.WriteLine("\nType (1 = StaticDES or 2 = DES or 3 = AES) to use the static encryption class or type anything to use the instantiated crypto class.");
             Console.ForegroundColor = ConsoleColor.White;
 
-            bool useStatic = Console.ReadLine().Equals("y", StringComparison.OrdinalIgnoreCase);
+            string method = Console.ReadLine();
 
             Console.BackgroundColor = ConsoleColor.Magenta;
             Console.WriteLine("Enter the phrase you want to encrypt.");
             Console.BackgroundColor = ConsoleColor.Black;
 
+            Func FuncCrypt = GetMethod(Convert.ToInt16(method));
             var obj = new Obj(Console.ReadLine());
-            Func FuncCrypt = (useStatic ? new Func(StaticCryptTest) : new Func(CryptTest));
             FuncCrypt(obj);
 
             Console.BackgroundColor = ConsoleColor.DarkGreen;
@@ -52,30 +52,51 @@ namespace CryptTestConsole
             Console.ReadKey();
         }
 
-        private static void CryptTest(Obj obj)
+        private static Func GetMethod(short method)
         {
-            var crypt = new Cryptography(
+            if (method == 1) return new Func(StaticCryptDESTest);
+            if (method == 2) return new Func(CryptDESTest);
+            if (method == 3) return new Func(CryptAESTest);
+            throw new Exception("No method was chosen!");
+        }
 
-                    baseKey: StaticCryptography.GenerateBaseKey(),
-                    rgbiv: StaticCryptography.GenerateRGBIV(),
-                    salt: StaticCryptography.GenerateSalt()
+        private static void StaticCryptDESTest(Obj obj)
+        {
+            StaticCryptographyDES.Initialize(
+
+                    baseKey: StaticCryptographyDES.GenerateBaseKey(),
+                    rgbiv: StaticCryptographyDES.GenerateRGBIV(),
+                    salt: StaticCryptographyDES.GenerateSalt()
+                );
+
+            obj.EncryptedWord = StaticCryptographyDES.Encrypt(obj.Word);
+            obj.DecryptedWord = StaticCryptographyDES.Decrypt(obj.EncryptedWord);
+        }
+
+        private static void CryptDESTest(Obj obj)
+        {
+            var crypt = new CryptographyDES(
+
+                    baseKey: CryptographyDES.GenerateBaseKey(),
+                    rgbiv: CryptographyDES.GenerateRGBIV(),
+                    salt: CryptographyDES.GenerateSalt()
                 );
 
             obj.EncryptedWord = crypt.Encrypt(obj.Word);
             obj.DecryptedWord = crypt.Decrypt(obj.EncryptedWord);
         }
 
-        private static void StaticCryptTest(Obj obj)
+        private static void CryptAESTest(Obj obj)
         {
-            StaticCryptography.Initialize(
+            var crypt = new CryptographyAES(
 
-                    baseKey: StaticCryptography.GenerateBaseKey(),
-                    rgbiv: StaticCryptography.GenerateRGBIV(),
-                    salt: StaticCryptography.GenerateSalt()
+                    key: CryptographyAES.GenerateKey(),
+                    iv: CryptographyAES.GenerateIV(),
+                    bits: CryptographyAES.BitsEnum.bit192
                 );
 
-            obj.EncryptedWord = StaticCryptography.Encrypt(obj.Word);
-            obj.DecryptedWord = StaticCryptography.Decrypt(obj.EncryptedWord);
+            obj.EncryptedWord = crypt.Encrypt(obj.Word);
+            obj.DecryptedWord = crypt.Decrypt(obj.EncryptedWord);
         }
 
         private class Obj
