@@ -75,7 +75,7 @@ namespace Vasconcellos.Crypt
         /// <summary>
         /// Encrypt
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="bytes"></param>
         /// <returns>byte[]</returns>
         public byte[] Encrypt(byte[] bytes)
         {
@@ -124,7 +124,7 @@ namespace Vasconcellos.Crypt
         /// <summary>
         /// Decrypt
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="bytes"></param>
         /// <returns>byte[]</returns>
         public byte[] Decrypt(byte[] bytes)
         {
