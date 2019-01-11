@@ -36,9 +36,14 @@ namespace Vasconcellos.Crypt
     public class CryptographyRSA
     {
         private readonly RSACryptoServiceProvider _serviceProvider;
+
         private readonly RSAParameters _privateKey;
+
         private readonly RSAParameters _publicKey;
+
         private readonly bool _OAEP;
+
+        private readonly BitsEnum Bits;
 
         public enum BitsEnum
         {
@@ -58,7 +63,8 @@ namespace Vasconcellos.Crypt
         /// <param name="doOAEPPadding"></param>
         public CryptographyRSA(BitsEnum keySize, bool OAEP = false)
         {
-            this._serviceProvider = new RSACryptoServiceProvider((int)keySize);
+            this.Bits = keySize;
+            this._serviceProvider = new RSACryptoServiceProvider((int)this.Bits);
             this._privateKey = this._serviceProvider.ExportParameters(true);
             this._publicKey = this._serviceProvider.ExportParameters(false);
             this._OAEP = OAEP;
@@ -75,7 +81,8 @@ namespace Vasconcellos.Crypt
             if (privateKey.Modulus.Length != publicKey.Modulus.Length)
                 throw new ArgumentException("Private key size differs from public key!");
 
-            this._serviceProvider = new RSACryptoServiceProvider(privateKey.Modulus.Length * 8);
+            this.Bits = (BitsEnum)(privateKey.Modulus.Length * 8);
+            this._serviceProvider = new RSACryptoServiceProvider((int)this.Bits);
             this._privateKey = privateKey;
             this._publicKey = publicKey;
             this._OAEP = OAEP;

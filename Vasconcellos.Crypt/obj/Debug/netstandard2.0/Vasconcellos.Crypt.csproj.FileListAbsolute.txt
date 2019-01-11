@@ -15,3 +15,4 @@ C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Debug\netstandard2.0\V
 C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Debug\netstandard2.0\Vasconcellos.Crypt.AssemblyInfo.cs
 C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Debug\netstandard2.0\Vasconcellos.Crypt.dll
 C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Debug\netstandard2.0\Vasconcellos.Crypt.pdb
+C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Debug\netstandard2.0\Vasconcellos.Crypt.csprojAssemblyReference.cache
