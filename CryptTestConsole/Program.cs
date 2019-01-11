@@ -30,6 +30,18 @@ namespace CryptTestConsole
 
         internal static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nTo use Asymmetric Cryptography? y = yes\n");
+            Console.ForegroundColor = ConsoleColor.White;
+
+            string asymmetric = Console.ReadLine();
+
+            if (asymmetric.Equals("y", StringComparison.OrdinalIgnoreCase)) Asymmetric();
+            else Symetric();
+        }
+
+        private static void Symetric()
+        {
             while (true)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -50,6 +62,38 @@ namespace CryptTestConsole
                 Console.WriteLine(obj.EncryptedWord);
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.WriteLine($"{obj.DecryptedWord}\n");
+            }
+        }
+
+        private static void Asymmetric()
+        {
+            while (true)
+            {
+                CryptographyRSA rs = new CryptographyRSA(CryptographyRSA.BitsEnum.bit512);
+                string cypher = String.Empty;
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nPublic Key: \n {rs.PublicKeyXML()}\n");
+                Console.ForegroundColor = ConsoleColor.White;
+
+                Console.BackgroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("Enter the text for Encrypt.");
+                Console.BackgroundColor = ConsoleColor.Black;
+                var text = Console.ReadLine();
+                if (text != String.Empty)
+                {
+                    cypher = rs.Encrypt(text);
+                    Console.WriteLine($"\nEncrypted Text:\n\n {cypher} \n");
+
+                }
+
+                Console.BackgroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("Press enter to Decrypt.");
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.ReadLine();
+                var plainText = rs.Decrypt(cypher);
+                Console.WriteLine("Text Decrypted:\n");
+                Console.WriteLine(plainText);
+                Console.ReadLine();
             }
         }
 
