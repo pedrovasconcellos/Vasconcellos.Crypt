@@ -38,7 +38,7 @@ namespace Vasconcellos.Crypt
 
         public readonly bool Initialized;
 
-        private readonly BitsEnum Bits;
+        public readonly BitsEnum Bits;
 
         public enum BitsEnum
         {

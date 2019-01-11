@@ -39,11 +39,11 @@ namespace Vasconcellos.Crypt
 
         private readonly RSAParameters _privateKey;
 
-        private readonly RSAParameters _publicKey;
+        public readonly RSAParameters _publicKey;
 
-        private readonly bool _OAEP;
+        public readonly bool _OAEP;
 
-        private readonly BitsEnum Bits;
+        public readonly BitsEnum Bits;
 
         public enum BitsEnum
         {
@@ -89,10 +89,10 @@ namespace Vasconcellos.Crypt
         }
 
         /// <summary>
-        /// PublicKeyXML
+        /// PublicKeyToXML
         /// </summary>
         /// <returns>string</returns>
-        public string PublicKeyXML()
+        public string PublicKeyToXML()
         {
             using (var sw = new StringWriter())
             {
@@ -103,10 +103,18 @@ namespace Vasconcellos.Crypt
         }
 
         /// <summary>
-        /// GetPublicKey
+        /// RSAKeyToXML
         /// </summary>
-        /// <returns>RSAParameters</returns>
-        public RSAParameters GetPublicKey() => this._publicKey;
+        /// <returns>string</returns>
+        public string RSAKeyToXML(RSAParameters RSAKey)
+        {
+            using (var sw = new StringWriter())
+            {
+                var xs = new XmlSerializer(typeof(RSAParameters));
+                xs.Serialize(sw, RSAKey);
+                return sw.ToString();
+            }
+        }
 
         /// <summary>
         /// Encrypt

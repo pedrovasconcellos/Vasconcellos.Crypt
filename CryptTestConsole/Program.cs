@@ -81,7 +81,7 @@ namespace CryptTestConsole
                 CryptographyRSA rs = new CryptographyRSA(privateKey, publicKey);
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nPublic Key: \n {rs.PublicKeyXML()}\n");
+                Console.WriteLine($"\nPublic Key: \n {rs.PublicKeyToXML()}\n");
                 Console.ForegroundColor = ConsoleColor.White;
 
                 Console.BackgroundColor = ConsoleColor.Magenta;
