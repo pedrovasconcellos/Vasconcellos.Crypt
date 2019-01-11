@@ -55,7 +55,7 @@ namespace Vasconcellos.Crypt
         /// <param name="bits"></param>
         public CryptographyAES(string key, byte[] iv = null, BitsEnum bits = BitsEnum.bit256)
         {
-            int numberKeyBytes = (int)bits / 8;
+            int numberKeyBytes = ((int)bits) / 8;
             int numberIVBytes = 16;
 
             if (iv != null && iv.Length != numberIVBytes) throw new ArgumentException($"The IV must contain {numberIVBytes} positions.");
