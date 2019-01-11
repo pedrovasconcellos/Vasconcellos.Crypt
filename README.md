@@ -15,6 +15,8 @@
 ##### Nuget Package Manager: Install-Package Vasconcellos.Crypt
 ##### Nuget .NET CLI: dotnet add package Vasconcellos.Crypt
 
+##### Asymmetric Cryptography Algorithms: RSA
+##### Symmetric Cryptography Algorithms: AES, DES
 
 Use to initialize the static cryptography
 ```csharp
