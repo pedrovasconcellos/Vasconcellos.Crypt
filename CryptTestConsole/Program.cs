@@ -20,6 +20,7 @@
 //CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Security.Cryptography;
 using Vasconcellos.Crypt;
 
 namespace CryptTestConsole
@@ -49,19 +50,23 @@ namespace CryptTestConsole
                 Console.ForegroundColor = ConsoleColor.White;
 
                 string method = Console.ReadLine();
+                if (string.IsNullOrEmpty(method)) return;
 
                 Console.BackgroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("Enter the phrase you want to encrypt.");
+                Console.WriteLine("Enter the phrase you want to encrypt.\n");
                 Console.BackgroundColor = ConsoleColor.Black;
 
                 Func FuncCrypt = GetMethod(Convert.ToInt16(method));
-                var obj = new Obj(Console.ReadLine());
+                var text = Console.ReadLine();
+                if (string.IsNullOrEmpty(text)) return;
+                var obj = new Obj(text);
                 FuncCrypt(obj);
 
                 Console.BackgroundColor = ConsoleColor.DarkGreen;
-                Console.WriteLine(obj.EncryptedWord);
+                Console.WriteLine($"\n{obj.EncryptedWord}");
                 Console.BackgroundColor = ConsoleColor.Black;
-                Console.WriteLine($"{obj.DecryptedWord}\n");
+                Console.WriteLine($"\n{obj.DecryptedWord}\n");
+                Console.ReadKey();
             }
         }
 
@@ -69,8 +74,12 @@ namespace CryptTestConsole
         {
             while (true)
             {
-                CryptographyRSA rs = new CryptographyRSA(CryptographyRSA.BitsEnum.bit512);
-                string cypher = String.Empty;
+                var cryptoServiceProvider = new RSACryptoServiceProvider((int)CryptographyRSA.BitsEnum.bit2048);
+                var privateKey = cryptoServiceProvider.ExportParameters(true);
+                var publicKey = cryptoServiceProvider.ExportParameters(false);
+
+                CryptographyRSA rs = new CryptographyRSA(privateKey, publicKey);
+
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"\nPublic Key: \n {rs.PublicKeyXML()}\n");
                 Console.ForegroundColor = ConsoleColor.White;
@@ -78,7 +87,17 @@ namespace CryptTestConsole
                 Console.BackgroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("Enter the text for Encrypt.");
                 Console.BackgroundColor = ConsoleColor.Black;
+
+                //var bytes = new byte[27];
+                //using (var crypto = new RNGCryptoServiceProvider())
+                //{
+                //    crypto.GetBytes(bytes);
+                //}
+                //var text = Convert.ToBase64String(bytes);
+
                 var text = Console.ReadLine();
+                if (string.IsNullOrEmpty(text)) return;
+                string cypher = String.Empty;
                 if (text != String.Empty)
                 {
                     cypher = rs.Encrypt(text);
@@ -94,6 +113,7 @@ namespace CryptTestConsole
                 Console.WriteLine("Text Decrypted:\n");
                 Console.WriteLine(plainText);
                 Console.ReadLine();
+                Console.ReadKey();
             }
         }
 

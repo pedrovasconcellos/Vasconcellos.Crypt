@@ -29,18 +29,20 @@ namespace Vasconcellos.Crypt
 {
     /// <summary>
     /// CryptographyRSA
+    /// Note: RSA encryption is only mean for small amounts of data, the amount of data you can encrypt is dependent on the size of the key you are using.
+    /// Note: There's a good reason for this, asymmetric encryption is computationally expensive. 
+    ///       If you want to encrypt large amounts of data you should be using symmetric encryption.
     /// </summary>
     public class CryptographyRSA
     {
         private readonly RSACryptoServiceProvider _serviceProvider;
         private readonly RSAParameters _privateKey;
         private readonly RSAParameters _publicKey;
-        private readonly bool _doOAEPPadding;
+        private readonly bool _OAEP;
 
         public enum BitsEnum
         {
-            bit128 = 128,
-            bit256 = 256,
+            bit384 = 384,
             bit512 = 512,
             bit1024 = 1024,
             bit2048 = 2048,
@@ -54,12 +56,29 @@ namespace Vasconcellos.Crypt
         /// </summary>
         /// <param name="keySize"></param>
         /// <param name="doOAEPPadding"></param>
-        public CryptographyRSA(BitsEnum keySize, bool doOAEPPadding = false)
+        public CryptographyRSA(BitsEnum keySize, bool OAEP = false)
         {
             this._serviceProvider = new RSACryptoServiceProvider((int)keySize);
             this._privateKey = this._serviceProvider.ExportParameters(true);
             this._publicKey = this._serviceProvider.ExportParameters(false);
-            this._doOAEPPadding = doOAEPPadding;
+            this._OAEP = OAEP;
+        }
+
+        /// <summary>
+        /// CryptographyRSA constructor
+        /// </summary>
+        /// <param name="privateKey"></param>
+        /// <param name="publicKey"></param>
+        /// <param name="doOAEPPadding"></param>
+        public CryptographyRSA(RSAParameters privateKey, RSAParameters publicKey, bool OAEP = false)
+        {
+            if (privateKey.Modulus.Length != publicKey.Modulus.Length)
+                throw new ArgumentException("Private key size differs from public key!");
+
+            this._serviceProvider = new RSACryptoServiceProvider(privateKey.Modulus.Length * 8);
+            this._privateKey = privateKey;
+            this._publicKey = publicKey;
+            this._OAEP = OAEP;
         }
 
         /// <summary>
@@ -77,67 +96,22 @@ namespace Vasconcellos.Crypt
         }
 
         /// <summary>
-        /// PrivateKeyXML
-        /// </summary>
-        /// <returns>string</returns>
-        public string PrivateKeyXML()
-        {
-            using (var sw = new StringWriter())
-            {
-                var xs = new XmlSerializer(typeof(RSAParameters));
-                xs.Serialize(sw, this._privateKey);
-                return sw.ToString();
-            }
-        }
-
-        /// <summary>
         /// GetPublicKey
         /// </summary>
         /// <returns>RSAParameters</returns>
-        public RSAParameters GetPublicKey()
-        {
-            return this._publicKey;
-        }
-
-        /// <summary>
-        /// GetPrivateKey
-        /// </summary>
-        /// <returns>RSAParameters</returns>
-        public RSAParameters GetPrivateKey()
-        {
-            return this._privateKey;
-        }
+        public RSAParameters GetPublicKey() => this._publicKey;
 
         /// <summary>
         /// Encrypt
         /// </summary>
         /// <param name="text"></param>
-        /// <param name="publicKey"></param>
-        /// <param name="doOAEPPadding"></param>
-        /// <returns>string</returns>
-        public string Encrypt(string text, RSAParameters publicKey, bool doOAEPPadding = false)
+        /// <returns>byte[]</returns>
+        public byte[] Encrypt(byte[] bytes)
         {
-            if (string.IsNullOrEmpty(text)) return null;
-            this._serviceProvider.ImportParameters(publicKey);
-            var data = Encoding.Unicode.GetBytes(text);
-            var encryptedText = this._serviceProvider.Encrypt(data, doOAEPPadding);
-            return Convert.ToBase64String(encryptedText);
-        }
-
-        /// <summary>
-        /// Decrypt
-        /// </summary>
-        /// <param name="encryptedText"></param>
-        /// <param name="privateKey"></param>
-        /// <param name="doOAEPPadding"></param>
-        /// <returns>string</returns>
-        public string Decrypt(string encryptedText, RSAParameters privateKey, bool doOAEPPadding = false)
-        {
-            if (string.IsNullOrEmpty(encryptedText)) return null;
-            var dataBytes = Convert.FromBase64String(encryptedText);
-            this._serviceProvider.ImportParameters(privateKey);
-            var text = this._serviceProvider.Decrypt(dataBytes, doOAEPPadding);
-            return Encoding.Unicode.GetString(text);
+            if (bytes == null || bytes.Length == 0) return null;
+            this._serviceProvider.ImportParameters(this._publicKey);
+            var response = this._serviceProvider.Encrypt(bytes, this._OAEP);
+            return response;
         }
 
         /// <summary>
@@ -148,10 +122,21 @@ namespace Vasconcellos.Crypt
         public string Encrypt(string text)
         {
             if (string.IsNullOrEmpty(text)) return null;
-            this._serviceProvider.ImportParameters(this._publicKey);
-            var data = Encoding.Unicode.GetBytes(text);
-            var encryptedText = this._serviceProvider.Encrypt(data, this._doOAEPPadding);
-            return Convert.ToBase64String(encryptedText);
+            var response = this.Encrypt(Encoding.Unicode.GetBytes(text));
+            return Convert.ToBase64String(response);
+        }
+
+        /// <summary>
+        /// Decrypt
+        /// </summary>
+        /// <param name="encryptedText"></param>
+        /// <returns>byte[]</returns>
+        public byte[] Decrypt(byte[] encryptedBytes)
+        {
+            if (encryptedBytes == null || encryptedBytes.Length == 0) return null;
+            this._serviceProvider.ImportParameters(this._privateKey);
+            var response = this._serviceProvider.Decrypt(encryptedBytes, this._OAEP);
+            return response;
         }
 
         /// <summary>
@@ -162,10 +147,8 @@ namespace Vasconcellos.Crypt
         public string Decrypt(string encryptedText)
         {
             if (string.IsNullOrEmpty(encryptedText)) return null;
-            var dataBytes = Convert.FromBase64String(encryptedText);
-            this._serviceProvider.ImportParameters(this._privateKey);
-            var text = this._serviceProvider.Decrypt(dataBytes, this._doOAEPPadding);
-            return Encoding.Unicode.GetString(text);
+            var response = this.Decrypt(Convert.FromBase64String(encryptedText));
+            return Encoding.Unicode.GetString(response);
         }
     }
 }

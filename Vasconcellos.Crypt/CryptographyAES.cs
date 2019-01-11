@@ -76,16 +76,15 @@ namespace Vasconcellos.Crypt
         /// Encrypt
         /// </summary>
         /// <param name="text"></param>
-        /// <returns>string</returns>
-        public string Encrypt(string text)
+        /// <returns>byte[]</returns>
+        public byte[] Encrypt(byte[] bytes)
         {
             try
             {
-                if (string.IsNullOrEmpty(text)) return null;
+                if (bytes == null || bytes.Length == 0) return null;
                 if (Initialized == false) throw new ArgumentException($"The class {nameof(CryptographyAES)} was not initialized.");
 
                 byte[] byteKey = Convert.FromBase64String(this.Key);
-                byte[] byteText = new UTF8Encoding().GetBytes(text);
 
                 using (Rijndael rijndael = new RijndaelManaged
                 {
@@ -98,10 +97,60 @@ namespace Vasconcellos.Crypt
                         rijndael.CreateEncryptor(byteKey, this.IV),
                         CryptoStreamMode.Write);
 
-                    encryptor.Write(byteText, 0, byteText.Length);
+                    encryptor.Write(bytes, 0, bytes.Length);
                     encryptor.FlushFinalBlock();
 
-                    return Convert.ToBase64String(mStream.ToArray());
+                    return mStream.ToArray();
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Encrypt
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>string</returns>
+        public string Encrypt(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return null;
+            byte[] byteText = new UTF8Encoding().GetBytes(text);
+            return Convert.ToBase64String(Encrypt(byteText));
+        }
+
+        /// <summary>
+        /// Decrypt
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns>byte[]</returns>
+        public byte[] Decrypt(byte[] bytes)
+        {
+            try
+            {
+                if (bytes == null || bytes.Length == 0) return null;
+                if (Initialized == false) throw new ArgumentException($"The class {nameof(CryptographyAES)} was not initialized.");
+
+                byte[] byteKey = Convert.FromBase64String(this.Key);
+
+                using (Rijndael rijndael = new RijndaelManaged
+                {
+                    KeySize = (int)this.Bits
+                })
+                {
+                    MemoryStream mStream = new MemoryStream();
+
+                    CryptoStream decryptor = new CryptoStream(
+                        mStream,
+                        rijndael.CreateDecryptor(byteKey, this.IV),
+                        CryptoStreamMode.Write);
+
+                    decryptor.Write(bytes, 0, bytes.Length);
+                    decryptor.FlushFinalBlock();
+
+                    return mStream.ToArray();
                 }
             }
             catch (Exception e)
@@ -117,36 +166,9 @@ namespace Vasconcellos.Crypt
         /// <returns>string</returns>
         public string Decrypt(string text)
         {
-            try
-            {
-                if (string.IsNullOrEmpty(text)) return null;
-                if (Initialized == false) throw new ArgumentException($"The class {nameof(CryptographyAES)} was not initialized.");
-
-                byte[] byteKey = Convert.FromBase64String(this.Key);
-                byte[] byteText = Convert.FromBase64String(text);
-
-                using (Rijndael rijndael = new RijndaelManaged
-                {
-                    KeySize = (int)this.Bits
-                })
-                {
-                    MemoryStream mStream = new MemoryStream();
-
-                    CryptoStream decryptor = new CryptoStream(
-                        mStream,
-                        rijndael.CreateDecryptor(byteKey, this.IV),
-                        CryptoStreamMode.Write);
-
-                    decryptor.Write(byteText, 0, byteText.Length);
-                    decryptor.FlushFinalBlock();
-
-                    return new UTF8Encoding().GetString(mStream.ToArray());
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
+            if (string.IsNullOrEmpty(text)) return null;
+            byte[] byteText = Convert.FromBase64String(text);
+            return new UTF8Encoding().GetString(Decrypt(byteText));
         }
 
         /// <summary>
