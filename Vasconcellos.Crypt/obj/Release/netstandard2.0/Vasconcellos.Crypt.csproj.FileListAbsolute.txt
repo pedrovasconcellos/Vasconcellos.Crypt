@@ -1,8 +1,0 @@
-C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\bin\Release\netstandard2.0\Vasconcellos.Crypt.deps.json
-C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\bin\Release\netstandard2.0\Vasconcellos.Crypt.dll
-C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\bin\Release\netstandard2.0\Vasconcellos.Crypt.pdb
-C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Release\netstandard2.0\Vasconcellos.Crypt.csproj.CoreCompileInputs.cache
-C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Release\netstandard2.0\Vasconcellos.Crypt.AssemblyInfoInputs.cache
-C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Release\netstandard2.0\Vasconcellos.Crypt.AssemblyInfo.cs
-C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Release\netstandard2.0\Vasconcellos.Crypt.dll
-C:\Vasconcellos\Vasconcellos.Crypt\Vasconcellos.Crypt\obj\Release\netstandard2.0\Vasconcellos.Crypt.pdb
